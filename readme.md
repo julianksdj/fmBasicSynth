@@ -2,6 +2,8 @@
 
 First working version with the basic features. Currently working on new features.
 
+![image](https://user-images.githubusercontent.com/66480309/142676975-767126d1-5679-44d4-af08-0062d7eb3de3.png)
+
 ## Features:
 	•	Monophonic synth
 	•	Sine wave oscillator for the carrier wave
