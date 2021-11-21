@@ -133,13 +133,14 @@ void FmsynthAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
     if(slider == &carrierFreqSlider)
     {
         audioProcessor.carrFreq = carrierFreqSlider.getValue();
-        audioProcessor.updateAngleDelta();
+        //audioProcessor.updateAngleDelta();
+        audioProcessor.setFrequency();
     }
     if(slider == &modulatorFreqSlider)
     {
         audioProcessor.modFreq = modulatorFreqSlider.getValue();
-        //audioProcessor.modFreq[1] = modulatorFreqSlider.getValue();
-        audioProcessor.updateAngleFM();
+        //audioProcessor.updateAngleFM();
+        audioProcessor.setFrequencyFM();
     }
     if(slider == &modulatorAmpSlider)
     {
@@ -174,7 +175,9 @@ void FmsynthAudioProcessorEditor::handleNoteOn (juce::MidiKeyboardState* source,
     nota = juce::MidiMessage::getMidiNoteInHertz (midiNoteNumber);
     printf("Calculated frequency %f\n",nota);
     audioProcessor.carrFreq=nota;
-    audioProcessor.updateAngleDelta();
+    //audioProcessor.updateAngleDelta();
+    audioProcessor.setFrequency();
+    audioProcessor.setFrequencyFM();
     audioProcessor.envCount = 0;
     audioProcessor.updateAttack();
     audioProcessor.updateDecay();

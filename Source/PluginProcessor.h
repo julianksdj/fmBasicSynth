@@ -72,8 +72,6 @@ public:
     bool noteOn = false;
     double releaseLevel = 0.0;
     
-    void updateAngleDelta();
-    void updateAngleFM();
     void updateAttack();
     void updateDecay();
     void updateRelease();
@@ -81,6 +79,9 @@ public:
     void setMidiInput (int index);
     void handleIncomingMidiMessage (juce::MidiInput *source, const juce::MidiMessage &message) override;
     
+    void setFrequency();
+    void setFrequencyFM();
+    float getNextSample(int channel);
 
 private:
     double currentSampleRate = 0.0, angleDelta = 0.0, angleDeltaFM = 0.0;

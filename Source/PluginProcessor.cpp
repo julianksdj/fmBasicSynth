@@ -95,8 +95,8 @@ void FmsynthAudioProcessor::changeProgramName (int index, const juce::String& ne
 void FmsynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     currentSampleRate = sampleRate;
-    updateAngleDelta();
-    updateAngleFM();
+    setFrequency();
+    setFrequencyFM();
     
     // midi handling prep
     auto midiInputs = juce::MidiInput::getAvailableDevices();
@@ -157,9 +157,13 @@ void FmsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         auto* channelData = buffer.getWritePointer (channel);
         for (auto sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
-            auto currentSample = (float) std::sin(currentAngle[channel] + modAmp * std::cos(currentAngleFM[channel]));
-            currentAngle[channel] += angleDelta;
-            currentAngleFM[channel] += angleDeltaFM;
+            //auto currentSample = (float) std::sin(currentAngle[channel] + modAmp * std::cos(currentAngleFM[channel]));
+            setFrequency();
+            setFrequencyFM();
+            auto currentSample = getNextSample(channel);
+            
+            //currentAngle[channel] += angleDelta;
+            //currentAngleFM[channel] += angleDeltaFM;
             
             if(noteOn==true) //pressed note on the keyboard
             {
@@ -218,16 +222,27 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new FmsynthAudioProcessor();
 }
 
-void FmsynthAudioProcessor::updateAngleDelta()
+void FmsynthAudioProcessor::setFrequency()
 {
-    auto cyclesPerSample = carrFreq / currentSampleRate;
-    angleDelta = cyclesPerSample * 2.0 * juce::MathConstants<double>::pi;
+    auto cyclesPerSample = carrFreq /currentSampleRate;
+    angleDelta = cyclesPerSample * juce::MathConstants<double>::twoPi;
+}
+void FmsynthAudioProcessor::setFrequencyFM()
+{
+    auto cyclesPerSample = modFreq / currentSampleRate;
+    angleDeltaFM = cyclesPerSample * juce::MathConstants<double>::twoPi;
 }
 
-void FmsynthAudioProcessor::updateAngleFM()
+float FmsynthAudioProcessor::getNextSample(int channel)
 {
-    //modAmp *  std::cos(2.0 * juce::MathConstants<float>::pi * modFreq * sample / currentSampleRate);
-    angleDeltaFM = modFreq * 2.0 * juce::MathConstants<float>::pi / currentSampleRate;
+    float sample = std::sin(currentAngle[channel] + modAmp * std::cos(currentAngleFM[channel]));
+    currentAngle[channel] += angleDelta;
+    currentAngleFM[channel] += angleDeltaFM;
+    if (currentAngle[channel]>=juce::MathConstants<double>::twoPi)
+        currentAngle[channel] -= juce::MathConstants<double>::twoPi;
+    if (currentAngleFM[channel]>=juce::MathConstants<double>::twoPi)
+        currentAngleFM[channel] -= juce::MathConstants<double>::twoPi;
+    return sample;
 }
 
 void FmsynthAudioProcessor::updateAttack()
