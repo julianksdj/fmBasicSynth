@@ -9,16 +9,17 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Voice.h"
 
 //==============================================================================
 /**
 */
-class FmsynthAudioProcessor  : public juce::AudioProcessor ,
-                               private juce::MidiInputCallback
+class FmsynthAudioProcessor  : public juce::AudioProcessor
 {
 public:
     //==============================================================================
     FmsynthAudioProcessor();
+    
     ~FmsynthAudioProcessor() override;
 
     //==============================================================================
@@ -55,44 +56,109 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
     
     //==============================================================================
-    double carrAmp = 0.0;
-    double carrFreq = 50;
-    double modFreq = 100;
-    double modAmp = 0.0000001;
-    double modAmpSmoothed = 0.0;
-    double attackTime = 0.0001;
-    double decayTime = 0.0001;
-    double sustainLevel = 0.125;
-    double releaseTime = 0.0001;
-    int attackSamples = 0;
-    int decaySamples = 0;
-    int daSamples = 0;
-    int releaseSamples = 0;
-    int envCount = 100;
-    bool noteOn = false;
-    double releaseLevel = 0.0;
     
-    void updateAttack();
-    void updateDecay();
-    void updateRelease();
-    
-    void setMidiInput (int index);
-    void handleIncomingMidiMessage (juce::MidiInput *source, const juce::MidiMessage &message) override;
-    
-    void setFrequency();
-    void setFrequencyFM();
-    float getNextSample(int channel);
+    int getVoicesSize()
+    {
+        return voices.size();
+    };
+    void addVoice(float frequency)
+    {
+        for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
+        {
+            if (voices.getUnchecked(voiceIndex)->getFrequency()==frequency)
+            {
+                voices.remove(voiceIndex);
+            }
+        }
+        Voice *voice = new Voice();
+        voice->setNoteOn(true);
+        voice->setFrequency(frequency);
+        voice->setModFreq(modFreq);
+        voice->setModAmp(modAmp);
+        voice->setFrequencyFM(modFreq);
+        voice->setAttack(attack);
+        voice->setDecay(decay);
+        voice->setSustain(sustain);
+        voice->setRelease(release);
+        voice->getEnvelope();
+        voices.add(voice);
+    };
+    void deactivateVoice(float freq)
+    {
+        for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
+        {
+            if (voices[voiceIndex]->getFrequency() == freq)
+            {
+                voices[voiceIndex]->setNoteOn(false);
+                voices[voiceIndex]->resetEnvCount();
+            }
+        }
+    }
+    void removeVoice(float freq)
+    {
+        for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
+        {
+            if (voices[voiceIndex]->getFrequency() == freq)
+                voices.remove(voiceIndex);
+        }
+    };
+    void setAttack(float a)
+    {
+        attack = a;
+    };
+    void setDecay(float d)
+    {
+        decay = d;
+    };
+    void setSustain(float s)
+    {
+        sustain = s;
+    };
+    void setRelease(float r)
+    {
+        release = r;
+    };
+    float getAttack()
+    {
+        return attack;
+    };
+    float getDecay()
+    {
+        return decay;
+    };
+    float getSustain()
+    {
+        return sustain;
+    };
+    float getRelease()
+    {
+        return release;
+    };
+    void setModFreq(float mod)
+    {
+        modFreq = mod;
+    };
+    void setModAmp(float mod)
+    {
+        modAmp = mod;
+    };
+    float getModFreq()
+    {
+        return modFreq;
+    };
+    float getModAmp()
+    {
+        return modAmp;
+    };
 
+    
 private:
-    double currentSampleRate = 0.0, angleDelta = 0.0, angleDeltaFM = 0.0;
-    double currentAngle[2] = {0.0, 0.0};
-    double currentAngleFM[2] = {0.0, 0.0};
-
-    juce::AudioDeviceManager deviceManager;
-    juce::ComboBox midiInputList;
-    juce::Label midiInputListLabel;
-    int lastInputIndex = 0;
-    bool isAddingFromMidiInput = false;
+    double currentSampleRate = 0.0;
+    juce::OwnedArray<Voice> voices; //voices array
+    
+    // GUI parameters
+    float attack, decay, sustain, release;
+    float modFreq, modAmp;
     
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FmsynthAudioProcessor)

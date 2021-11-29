@@ -30,6 +30,8 @@ public:
     void sliderValueChanged (juce::Slider *slider) override;
     void handleNoteOn (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
     void handleNoteOff (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
+    
+    void setMidiInput (int index);
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -37,8 +39,6 @@ private:
     FmsynthAudioProcessor& audioProcessor;
 
     //==============================================================================
-    juce::Slider carrierFreqSlider;
-    juce::Label  carrierFreqLabel;
     juce::Slider modulatorFreqSlider;
     juce::Label  modulatorFreqLabel;
     juce::Slider modulatorAmpSlider;
@@ -56,6 +56,8 @@ private:
 
     juce::MidiKeyboardState keyboardState;
     juce::MidiKeyboardComponent keyboardComponent;
+    
+    juce::AudioDeviceManager deviceManager;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FmsynthAudioProcessorEditor)
 };

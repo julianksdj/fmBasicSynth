@@ -10,6 +10,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+
 //==============================================================================
 FmsynthAudioProcessor::FmsynthAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -95,20 +96,10 @@ void FmsynthAudioProcessor::changeProgramName (int index, const juce::String& ne
 void FmsynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     currentSampleRate = sampleRate;
-    setFrequency();
-    setFrequencyFM();
-    
-    // midi handling prep
-    auto midiInputs = juce::MidiInput::getAvailableDevices();
-    // find the first enabled device and use that by default
-    for (auto input : midiInputs)
-    {
-        if (deviceManager.isMidiInputDeviceEnabled (input.identifier))
-        {
-            setMidiInput (midiInputs.indexOf (input));
-            break;
-        }
-    }
+    attack = 0.0001;
+    decay = 0.0001;
+    sustain = 0.125;
+    release = 0.0001;
 }
 
 void FmsynthAudioProcessor::releaseResources()
@@ -152,42 +143,49 @@ void FmsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
     
-    for (int channel = 0; channel < totalNumOutputChannels; ++channel)
+    // MIDI HANDLING -----------------------------------------------------------------------------------------
+    juce::MidiBuffer::Iterator it(midiMessages);
+    juce::MidiMessage currentMessage;
+    int samplePos;
+    
+    while (it.getNextEvent(currentMessage, samplePos))
     {
-        auto* channelData = buffer.getWritePointer (channel);
-        for (auto sample = 0; sample < buffer.getNumSamples(); ++sample)
+        if (currentMessage.isNoteOn())
         {
-            //auto currentSample = (float) std::sin(currentAngle[channel] + modAmp * std::cos(currentAngleFM[channel]));
-            setFrequency();
-            setFrequencyFM();
-            auto currentSample = getNextSample(channel);
-            
-            //currentAngle[channel] += angleDelta;
-            //currentAngleFM[channel] += angleDeltaFM;
-            
-            if(noteOn==true) //pressed note on the keyboard
-            {
-                if (envCount < attackSamples)
-                {
-                    carrAmp+=(0.125/attackSamples); //the amplitude raises until max amplitude is reached
-                }
-                else if (envCount < daSamples)
-                {
-                    carrAmp-=((0.125-sustainLevel)/decaySamples); //the amplitude decreases until sustain level is reached
-                }
-                releaseLevel = carrAmp; // saves the amplitude state
-            }
-            else //released note on the keyboard
-            {
-                if(carrAmp>0.0)
-                    carrAmp-=(releaseLevel/releaseSamples); //amplitude decreases until silence
-            }
-            
-            channelData[sample]  = currentSample * carrAmp;
-            envCount++;
+            printf("\nNOTE PRESSED\n");
+            printf("Received note %d\n",currentMessage.getNoteNumber());
+            addVoice(juce::MidiMessage::getMidiNoteInHertz(currentMessage.getNoteNumber()));
+        }
+        else if (currentMessage.isNoteOff())
+        {
+            printf("NOTE RELEASED\n");
+            deactivateVoice(juce::MidiMessage::getMidiNoteInHertz(currentMessage.getNoteNumber()));
         }
     }
-
+    // -------------------------------------------------------------------------------------------------------
+    
+    for (int channel = 0; channel < totalNumOutputChannels; ++channel)
+    {
+        auto* channelData = buffer.getWritePointer(channel);
+        for (auto sample = 0; sample < buffer.getNumSamples(); ++sample)
+        {
+            float sumOsc = 0.0;
+            // sum of oscillators
+            for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
+            {
+                auto* voice = voices.getUnchecked(voiceIndex);
+                auto amp = voice->getEnvelope();
+                if(voice->isActive())
+                {
+                    auto currentSample = voice->getNextSample(channel)*amp;
+                    sumOsc += currentSample;
+                }
+                else
+                    voices.remove(voiceIndex);
+            }
+            channelData[sample] += sumOsc;
+        }
+    }
 }
 
 //==============================================================================
@@ -222,69 +220,3 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new FmsynthAudioProcessor();
 }
 
-void FmsynthAudioProcessor::setFrequency()
-{
-    auto cyclesPerSample = carrFreq /currentSampleRate;
-    angleDelta = cyclesPerSample * juce::MathConstants<double>::twoPi;
-}
-void FmsynthAudioProcessor::setFrequencyFM()
-{
-    auto cyclesPerSample = modFreq / currentSampleRate;
-    angleDeltaFM = cyclesPerSample * juce::MathConstants<double>::twoPi;
-}
-
-float FmsynthAudioProcessor::getNextSample(int channel)
-{
-    float sample = std::sin(currentAngle[channel] + modAmp * std::cos(currentAngleFM[channel]));
-    currentAngle[channel] += angleDelta;
-    currentAngleFM[channel] += angleDeltaFM;
-    if (currentAngle[channel]>=juce::MathConstants<double>::twoPi)
-        currentAngle[channel] -= juce::MathConstants<double>::twoPi;
-    if (currentAngleFM[channel]>=juce::MathConstants<double>::twoPi)
-        currentAngleFM[channel] -= juce::MathConstants<double>::twoPi;
-    return sample;
-}
-
-void FmsynthAudioProcessor::updateAttack()
-{
-    attackSamples = currentSampleRate * attackTime;
-    printf("Attack time: %f\n", attackTime);
-    printf("Attack samples: %d\n", attackSamples);
-}
-void FmsynthAudioProcessor::updateDecay()
-{
-    decaySamples = currentSampleRate * decayTime;
-    printf("decay time %f\n", decayTime);
-    daSamples = decaySamples + attackSamples;
-    printf("decay Samples %d\n", decaySamples);
-    printf("da Samples %d\n", daSamples);
-}
-void FmsynthAudioProcessor::updateRelease()
-{
-    releaseSamples = currentSampleRate * releaseTime;
-    printf("release time %f\n", releaseTime);
-}
-
-
-void FmsynthAudioProcessor::setMidiInput (int index)
-{
-    auto list = juce::MidiInput::getAvailableDevices();
-
-    deviceManager.removeMidiInputDeviceCallback(list[lastInputIndex].identifier, this);
-
-    auto newInput = list[index];
-
-    if (! deviceManager.isMidiInputDeviceEnabled (newInput.identifier))
-        deviceManager.setMidiInputDeviceEnabled (newInput.identifier, true);
-
-    deviceManager.addMidiInputDeviceCallback (newInput.identifier, this);
-    midiInputList.setSelectedId (index + 1, juce::dontSendNotification);
-
-    lastInputIndex = index;
-}
-
-void FmsynthAudioProcessor::handleIncomingMidiMessage (juce::MidiInput *source, const juce::MidiMessage &message)
-{
-    const juce::ScopedValueSetter<bool> scopedInputFlag (isAddingFromMidiInput, true);
-    //keyboardState.processNextMidiEvent (message);
-}
