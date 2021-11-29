@@ -16,6 +16,8 @@ First working version with the basic features. Currently working on new features
 	•	Sliders for carrier amplitude envelope control
 
 ## Installing instructions (Mac OSX):
+
+	•	Download: https://drive.google.com/drive/folders/1916_gLFkCG97YC0xCcEAq3Tjp45Gd3tm?usp=sharing
 	•	Standalone app: Execute the fmsynth.app
   	•	VST3: Copy fmsynth.vst3 into your VST3 folder
 	•	Component: fmsynth.component into your components folder and use it in your DAW
