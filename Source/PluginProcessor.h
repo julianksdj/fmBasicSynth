@@ -72,6 +72,7 @@ public:
         }
         Voice *voice = new Voice();
         voice->setNoteOn(true);
+        voice->setSampleRate(currentSampleRate);
         voice->setFrequency(frequency);
         voice->setModFreq(modFreq);
         voice->setModAmp(modAmp);
@@ -93,7 +94,7 @@ public:
                 voices[voiceIndex]->resetEnvCount();
             }
         }
-    }
+    };
     void removeVoice(float freq)
     {
         for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
@@ -153,7 +154,7 @@ public:
 
     
 private:
-    double currentSampleRate = 0.0;
+    float currentSampleRate = 0.0;
     juce::OwnedArray<Voice> voices; //voices array
     
     // GUI parameters

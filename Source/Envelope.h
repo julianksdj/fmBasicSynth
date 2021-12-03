@@ -15,7 +15,6 @@ public:
     Envelope()
     {
         envCount = 0;
-        currentSampleRate = 48000;
     };
     
     float getEnvelope()
@@ -70,10 +69,6 @@ public:
         printf("release time %f\n", releaseTime);
         printf("release samples %d\n", releaseSamples);
     };
-    void setSampleRate(int sr)
-    {
-        currentSampleRate = sr;
-    };
     float getCarrAmp(){
         return carrAmp;
     };
@@ -85,7 +80,10 @@ public:
     };
     void resetEnvCount(){
         envCount = 0;
-    }
+    };
+    void setSampleRate(float sr){
+        currentSampleRate = sr;
+    };
     
 private:
     float currentSampleRate;

@@ -14,7 +14,6 @@ public:
     {
         modFreq = 500;
         modAmp = 0.0000001;
-        currentSampleRate = 48000;
     };
     void setFrequency (float frequency)
     {
@@ -54,6 +53,10 @@ public:
     void setModAmp(float m)
     {
         modAmp = m;
+    };
+    void setSampleRate(float sr)
+    {
+        currentSampleRate = sr;
     };
     
 private:

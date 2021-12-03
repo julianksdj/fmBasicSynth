@@ -92,12 +92,17 @@ public:
     {
         env.resetEnvCount();
     };
+    void setSampleRate(float sr)
+    {
+        osc.setSampleRate(sr);
+        env.setSampleRate(sr);
+    };
     
     
 private:
     Envelope env;
     SineOscillator osc;
-    double sampleRate = 48000;
+    //double sampleRate;
 };
 
 #endif /* Voice_h */
