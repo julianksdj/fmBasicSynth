@@ -15,6 +15,7 @@ public:
     Envelope()
     {
         envCount = 0;
+        envelope = 0.0000002f;
     };
     
     float getEnvelope()
@@ -24,7 +25,7 @@ public:
         {
             if (envCount < attackSamples)
             {
-                //carrAmp+=(0.125/attackSamples); //the amplitude raises until max amplitude is reached
+                //the amplitude raises until max amplitude is reached
                 envelope+=(1.f/attackSamples);
             }
             else if (envCount < daSamples)
@@ -49,17 +50,17 @@ public:
     {
         attackTime = a;
         attackSamples = currentSampleRate * attackTime;
-        printf("Attack time: %f\n", attackTime);
-        printf("Attack samples: %d\n", attackSamples);
+        //printf("Attack time: %f\n", attackTime);
+        //printf("Attack samples: %d\n", attackSamples);
     };
     void setDecay(float d)
     {
         decayTime = d;
         decaySamples = currentSampleRate * decayTime;
-        printf("decay time %f\n", decayTime);
+        //printf("decay time %f\n", decayTime);
         daSamples = decaySamples + attackSamples;
-        printf("decay Samples %d\n", decaySamples);
-        printf("da Samples %d\n", daSamples);
+        //printf("decay Samples %d\n", decaySamples);
+        //printf("da Samples %d\n", daSamples);
     };
     void setSustain(float s)
     {
@@ -69,9 +70,9 @@ public:
     {
         releaseTime = r;
         releaseSamples = currentSampleRate * releaseTime;
-        printf("release level %f\n", releaseLevel);
-        printf("release time %f\n", releaseTime);
-        printf("release samples %d\n", releaseSamples);
+        //printf("release level %f\n", releaseLevel);
+        //printf("release time %f\n", releaseTime);
+        //printf("release samples %d\n", releaseSamples);
     };
 
     void setNoteOn(bool n){

@@ -185,11 +185,11 @@ void FmsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
             for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
             {
                 auto* voice = voices.getUnchecked(voiceIndex);
-                auto amp = (voice->getAmpEnvelope())*0.125f;
+                //auto amp = (voice->getAmpEnvelope())*0.125f;
                 
                 if(voice->isActive())
                 {
-                    auto currentSample = voice->getNextSample(channel)*amp;
+                    auto currentSample = voice->getNextSample(channel);
                     sumOsc += currentSample;
                 }
                 else

@@ -16,8 +16,8 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
-    auto windowWidth = 700;
-    auto windowHeight = 300;
+    auto windowWidth = 500;
+    auto windowHeight = 230;
     
     setSize (windowWidth, windowHeight);
     
@@ -50,7 +50,7 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     addAndMakeVisible (op1CoarseKnob);
     op1CoarseKnob.setNormalisableRange(juce::NormalisableRange<double>(0.25f, 6.f, 0.25, 1.f));
     op1CoarseKnob.addListener (this);
-    //carCoarseKnob.setValue(audioProcessor.getOp1Coarse());
+    op1CoarseKnob.setValue(audioProcessor.getOp1Coarse());
     op1CoarseKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     op1CoarseKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
     
@@ -59,7 +59,7 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     op1FineKnob.setNormalisableRange(juce::NormalisableRange<double>(-12.f, 12.f, 0.1f, 1.f));
     //op1CoarseKnob.setTextValueSuffix (" Hz");
     op1FineKnob.addListener (this);
-    //carCoarseKnob.setValue(audioProcessor.getOp1Coarse());
+    op1FineKnob.setValue(audioProcessor.getOp1Fine());
     op1FineKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     op1FineKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
     
@@ -67,25 +67,23 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     addAndMakeVisible (op2AmpKnob);
     op2AmpKnob.setNormalisableRange(juce::NormalisableRange<double>(0.f, 1.f, 0.01f, 1.f));
     op2AmpKnob.addListener (this);
-    //op1AmpKnob.setValue(audioProcessor.getOp1Amp());
+    op2AmpKnob.setValue(audioProcessor.getOp2Amp());
     op2AmpKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     op2AmpKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
     
     //OP2 coarse
     addAndMakeVisible (op2CoarseKnob);
     op2CoarseKnob.setNormalisableRange(juce::NormalisableRange<double>(0.25f, 6.f, 0.25, 1.f));
-    //op2CoarseKnob.setTextValueSuffix (" Hz");
     op2CoarseKnob.addListener (this);
-    //carCoarseKnob.setValue(audioProcessor.getOp2Coarse());
+    op2CoarseKnob.setValue(audioProcessor.getOp2Coarse());
     op2CoarseKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     op2CoarseKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
     
     //OP2 fine
     addAndMakeVisible (op2FineKnob);
     op2FineKnob.setNormalisableRange(juce::NormalisableRange<double>(-12.f, 12.f, 0.1f, 1.f));
-    //op1CoarseKnob.setTextValueSuffix (" Hz");
     op2FineKnob.addListener (this);
-    //carCoarseKnob.setValue(audioProcessor.getOp1Coarse());
+    op2FineKnob.setValue(audioProcessor.getOp2Fine());
     op2FineKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
     op2FineKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
     
@@ -114,13 +112,13 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     addAndMakeVisible (op1ASlider);
     // min  attack time must be 0.0001 (100us) to avoid attackSamples from being 0
     // so the division Aa = 0.125 / attackSamples is never inf
-    op1ASlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 10.f, 0.0001f, 1.f));
+    op1ASlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op1ASlider.addListener (this);
     op1ASlider.setValue(audioProcessor.getOp1attack());
     //decay slider
     op1DSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op1DSlider);
-    op1DSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 10.f, 0.0001f, 1.f));
+    op1DSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op1DSlider.addListener (this);
     op1DSlider.setValue(audioProcessor.getOp1decay());
     //sustain slider
@@ -132,22 +130,20 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     //release slider
     op1RSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op1RSlider);
-    op1RSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 10.f, 0.0001f, 1.f));
+    op1RSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op1RSlider.addListener (this);
     op1ASlider.setValue(audioProcessor.getOp1release());
     //OP2 envelope
     //attack slider
     op2ASlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op2ASlider);
-    // min  attack time must be 0.0001 (100us) to avoid attackSamples from being 0
-    // so the division Aa = 0.125 / attackSamples is never inf
-    op2ASlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 10.f, 0.0001f, 1.f));
+    op2ASlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op2ASlider.addListener (this);
     op2ASlider.setValue(audioProcessor.getOp2attack());
     //decay slider
     op2DSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op2DSlider);
-    op2DSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 10.f, 0.0001f, 1.f));
+    op2DSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op2DSlider.addListener (this);
     op2DSlider.setValue(audioProcessor.getOp2decay());
     //sustain slider
@@ -159,7 +155,7 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     //release slider
     op2RSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op2RSlider);
-    op2RSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 10.f, 0.0001f, 1.f));
+    op2RSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op2RSlider.addListener (this);
     op2ASlider.setValue(audioProcessor.getOp2release());
     
@@ -171,7 +167,7 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     algoMenu.addItem ("OP1 <- OP2",  1);
     algoMenu.addItem ("OP1 -> OP2",  2);
     algoMenu.onChange = [this] { algoMenuChanged(); };
-    algoMenu.setSelectedId(audioProcessor.getAlgorithm()+1);
+    algoMenu.setSelectedId(audioProcessor.getAlgorithm());
     
 }
 
@@ -189,17 +185,11 @@ void FmsynthAudioProcessorEditor::paint (juce::Graphics& g)
 
 void FmsynthAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
-
     auto border = 20;
     auto sliderWidth = 20;
     auto sliderHeight = 100;
     auto knobWidth = 70;
     auto knobHeight = 70;
-    
-    op1Label.setBounds(5, 40, 30, 15);
-    op2Label.setBounds(5, 110, 30, 15);
     
     ampLabel.setBounds(border, 5, knobWidth, 15);
     coarseLabel.setBounds(border+knobWidth, 5, knobWidth, 15);
@@ -211,6 +201,9 @@ void FmsynthAudioProcessorEditor::resized()
     op2AmpKnob.setBounds (border, border+knobHeight, knobWidth, knobHeight);
     op2CoarseKnob.setBounds (border+knobWidth, border+knobHeight, knobWidth, knobHeight);
     op2FineKnob.setBounds (border+knobWidth*2, border+knobHeight, knobWidth, knobHeight);
+    
+    op1Label.setBounds(5, 40, 30, 15);
+    op2Label.setBounds(5, 110, 30, 15);
     
     keyboardComponent.setBounds(0, getHeight()-50, getWidth(), 50);
     
@@ -229,9 +222,8 @@ void FmsynthAudioProcessorEditor::resized()
     op2SSlider.setBounds(border+knobWidth*3+sliderWidth*2, border+knobHeight, 20, 70);
     op2RSlider.setBounds(border+knobWidth*3+sliderWidth*3, border+knobHeight, 20, 70);
 
-    algoLabel.setBounds(70+knobWidth*3+sliderWidth*4, border, 100, 20);
-    algoMenu.setBounds(70+knobWidth*3+sliderWidth*4, border+20, 100, 20);
-    
+    algoLabel.setBounds(70+knobWidth*3+sliderWidth*4, getHeight()/4, 100, 20);
+    algoMenu.setBounds(70+knobWidth*3+sliderWidth*4, getHeight()/4+20, 100, 20);
 }
 
 void FmsynthAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
@@ -240,21 +232,21 @@ void FmsynthAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
     {
         audioProcessor.setOp1Coarse(op1CoarseKnob.getValue()) ;
     }
-    else if(slider == &op1FineKnob)
-    {
-        audioProcessor.setOp1Fine(op1FineKnob.getValue()) ;
-    }
-    else if(slider == &op1AmpKnob)
-    {
-        audioProcessor.setOp1Amp(op1AmpKnob.getValue()) ;
-    }
     else if(slider == &op2CoarseKnob)
     {
         audioProcessor.setOp2Coarse(op2CoarseKnob.getValue()) ;
     }
+    else if(slider == &op1FineKnob)
+    {
+        audioProcessor.setOp1Fine(op1FineKnob.getValue()) ;
+    }
     else if(slider == &op2FineKnob)
     {
         audioProcessor.setOp2Fine(op2FineKnob.getValue()) ;
+    }
+    else if(slider == &op1AmpKnob)
+    {
+        audioProcessor.setOp1Amp(op1AmpKnob.getValue()) ;
     }
     else if(slider == &op2AmpKnob)
     {
@@ -276,7 +268,6 @@ void FmsynthAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
     {
         audioProcessor.setOp1release(op1RSlider.getValue());
     }
-    
     else if(slider == &op2ASlider)
     {
         audioProcessor.setOp2attack(op2ASlider.getValue());
@@ -297,18 +288,18 @@ void FmsynthAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
 
 void FmsynthAudioProcessorEditor::handleNoteOn (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity)
 {
-    printf("\nNOTE PRESSED\n");
-    printf("Received note %d\n",midiNoteNumber);
+    //printf("\nNOTE PRESSED\n");
+    //printf("Received note %d\n",midiNoteNumber);
     // frequency calculation from midi note data
     double nota = 0.0;
     nota = juce::MidiMessage::getMidiNoteInHertz (midiNoteNumber);
-    printf("Calculated frequency %f\n",nota);
+    //printf("Calculated frequency %f\n",nota);
     audioProcessor.addVoice(nota);
 }
 void FmsynthAudioProcessorEditor::handleNoteOff (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity)
 {
     auto nota = juce::MidiMessage::getMidiNoteInHertz (midiNoteNumber);
-    printf("NOTE RELEASED\n");
+    //printf("NOTE RELEASED\n");
     audioProcessor.deactivateVoice(nota);
 }
 

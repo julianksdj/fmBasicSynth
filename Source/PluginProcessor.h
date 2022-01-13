@@ -84,29 +84,17 @@ public:
         {
             voice->setFrequency(op1coarse * frequency + op1fine);
             voice->setFrequencyFM(op2coarse * frequency + op2fine);
-            voice->setModAmp(op2amp * 0.125f);
-            voice->setAmpAttack(op1attack);
-            voice->setAmpDecay(op1decay);
-            voice->setAmpSustain(op1sustain);
-            voice->setAmpRelease(op1release);
-            voice->setPitchAttack(op2attack);
-            voice->setPitchDecay(op2decay);
-            voice->setPitchSustain(op2sustain);
-            voice->setPitchRelease(op2release);
+            voice->initFMenv(op1attack, op1decay, op1sustain, op1release, op2attack, op2decay, op2sustain, op2release);
+            voice->setCarAmp(op1amp);
+            voice->setModAmp(op2amp);
         }
         else if (algorithm == 2)
         {
             voice->setFrequency(op2coarse * frequency + op2fine);
             voice->setFrequencyFM(op1coarse * frequency + op1fine);
-            voice->setModAmp(op1amp * 0.125f);
-            voice->setAmpAttack(op2attack);
-            voice->setAmpDecay(op2decay);
-            voice->setAmpSustain(op2sustain);
-            voice->setAmpRelease(op2release);
-            voice->setPitchAttack(op1attack);
-            voice->setPitchDecay(op1decay);
-            voice->setPitchSustain(op1sustain);
-            voice->setPitchRelease(op1release);
+            voice->initFMenv(op2attack, op2decay, op2sustain, op2release, op1attack, op1decay, op1sustain, op1release);
+            voice->setCarAmp(op2amp);
+            voice->setModAmp(op1amp);
         }
         voices.add(voice);
     };
@@ -129,7 +117,6 @@ public:
                 voices.remove(voiceIndex);
         }
     };
-    
     void setOp1attack(float a)
     {
         op1attack = a;
@@ -148,21 +135,20 @@ public:
     };
     void setOp2attack(float a)
     {
-        op1attack = a;
+        op2attack = a;
     };
     void setOp2decay(float d)
     {
-        op1decay = d;
+        op2decay = d;
     };
     void setOp2sustain(float s)
     {
-        op1sustain = s;
+        op2sustain = s;
     };
     void setOp2release(float r)
     {
-        op1release = r;
+        op2release = r;
     };
-    
     float getOp1attack()
     {
         return op1attack;
@@ -195,7 +181,6 @@ public:
     {
         return op2release;
     };
-
     float getOp1Amp()
     {
         return op1amp;
@@ -222,7 +207,6 @@ public:
     {
         op2coarse = c;
     };
-    
     float getOp1Coarse()
     {
         return op1coarse;
@@ -231,7 +215,6 @@ public:
     {
         return op2coarse;
     };
-    
     void setOp1Fine(float f)
     {
         op1fine = f;
@@ -240,16 +223,14 @@ public:
     {
         op2fine = f;
     };
-    
     float getOp1Fine()
     {
         return op1fine;
     };
     float getOp2Fine()
     {
-        return op1fine;
+        return op2fine;
     };
-    
     int getAlgorithm()
     {
         return algorithm;
@@ -258,8 +239,6 @@ public:
     {
         algorithm = algo;
     };
-    
-
     
 private:
     float currentSampleRate = 0.0;

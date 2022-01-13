@@ -7,6 +7,7 @@
 
 #ifndef SineOscillator_h
 #define SineOscillator_h
+#include "Envelope.h"
 
 class SineOscillator {
 public:
@@ -27,13 +28,14 @@ public:
     };
     float getNextSample(int channel)
     {
-        float sample = std::sin(currentAngle[channel] + modAmp * std::cos(currentAngleFM[channel]));
+        float sample = 0.125f * carAmp * std::sin(currentAngle[channel] + 10.f * modAmp * std::cos(currentAngleFM[channel]));
         currentAngle[channel] += angleDelta;
         currentAngleFM[channel] += angleDeltaFM;
         if (currentAngle[channel]>=juce::MathConstants<double>::twoPi)
             currentAngle[channel] -= juce::MathConstants<double>::twoPi;
         if (currentAngleFM[channel]>=juce::MathConstants<double>::twoPi)
             currentAngleFM[channel] -= juce::MathConstants<double>::twoPi;
+        updateFM();
         return sample;
     };
     void setSampleRate(float sr)
@@ -51,6 +53,62 @@ public:
     void setModAmp(float m)
     {
         modAmp = m;
+        modAmp0 = m;
+    };
+    void setCarAmp(float m)
+    {
+        carAmp = m;
+        carAmp0 = m;
+    };
+    // Envolvente de pitch (futura implementacion)
+    /*
+    void updateFM()
+    {
+        currentFreqFM = noteFreqFM * freqEnv.getEnvelope();
+        if (currentFreqFM < 20.f)
+            currentFreqFM = 20.f;
+        setFrequencyFM(currentFreqFM);
+    };*/
+    void updateFM()
+    {
+        carAmp = carAmp0 * ampEnv.getEnvelope();
+        modAmp = modAmp0 * fmEnv.getEnvelope();
+    };
+    void initFMenv(float ca, float cd, float cs, float cr, float ma, float md, float ms, float mr)
+    {
+        ampEnv.setSampleRate(currentSampleRate);
+        ampEnv.setAttack(ca);
+        ampEnv.setDecay(cd);
+        ampEnv.setSustain(cs);
+        ampEnv.setRelease(cr);
+        ampEnv.setNoteOn(true);
+        ampEnv.resetEnvCount();
+        
+        fmEnv.setSampleRate(currentSampleRate);
+        fmEnv.setAttack(ma);
+        fmEnv.setDecay(md);
+        fmEnv.setSustain(ms);
+        fmEnv.setRelease(mr);
+        fmEnv.setNoteOn(true);
+        fmEnv.resetEnvCount();
+    };
+    
+    void setNoteOn(bool n)
+    {
+        ampEnv.setNoteOn(n);
+        fmEnv.setNoteOn(n);
+    };
+    void resetEnvCount()
+    {
+        ampEnv.resetEnvCount();
+        fmEnv.resetEnvCount();
+    };
+    bool isActive()
+    {
+        if (ampEnv.getEnvelopeValue()<=0.0000001f)
+            return false;
+        else
+            return true;
     };
     
 private:
@@ -58,9 +116,13 @@ private:
     float currentSampleRate;
     float carrFreq;
     float modFreq;
-    float modAmp;
+    float carAmp, modAmp;
     float modAmpSmoothed;
-    float noteFreq;
+    float noteFreq; //, noteFreqFM;
+    float carAmp0, modAmp0;
+    
+    Envelope fmEnv, ampEnv;
+    //float currentFreq, currentFreqFM;
 };
 
 #endif /* SineOscillator_h */

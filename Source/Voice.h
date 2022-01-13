@@ -19,12 +19,11 @@ public:
     // voice features functions
     bool isActive ()
     {
-        if (ampEnv.getEnvelopeValue()<=0.0000001)
+        if (!osc.isActive())
             return false;
         else
             return true;
     };
-    
     // Oscillator functions
     void setFrequency (float f)
     {
@@ -42,76 +41,41 @@ public:
     {
         return osc.getNoteFreq();
     };
-    void setModAmp(float m)
+    void setCarAmp(float a)
     {
-        osc.setModAmp(m);
+        osc.setCarAmp(a);
+    };
+    void setModAmp(float a)
+    {
+        osc.setModAmp(a);
     };
 
-    // envelope functions
-    float getAmpEnvelope()
-    {
-        return ampEnv.getEnvelope();
-    };
-    void setAmpAttack(float a)
-    {
-        ampEnv.setAttack(a);
-    };
-    void setAmpDecay(float d)
-    {
-        ampEnv.setDecay(d);
-    };
-    void setAmpSustain(float s)
-    {
-        ampEnv.setSustain(s);
-    };
-    void setAmpRelease(float r)
-    {
-        ampEnv.setRelease(r);
-    };
-    void setPitchAttack(float a)
-    {
-        pitchEnv.setAttack(a);
-    };
-    void setPitchDecay(float d)
-    {
-        pitchEnv.setDecay(d);
-    };
-    void setPitchSustain(float s)
-    {
-        pitchEnv.setSustain(s);
-    };
-    void setPitchRelease(float r)
-    {
-        pitchEnv.setRelease(r);
-    };
     void setNoteOn(bool n)
     {
-        ampEnv.setNoteOn(n);
-        pitchEnv.setNoteOn(n);
+        osc.setNoteOn(n);
     };
+    
     void resetEnvCount()
     {
-        ampEnv.resetEnvCount();
-        pitchEnv.resetEnvCount();
+        osc.resetEnvCount();
     };
+    
     void setSampleRate(float sr)
     {
         osc.setSampleRate(sr);
-        ampEnv.setSampleRate(sr);
-        pitchEnv.setSampleRate(sr);
-        
     };
     void setNoteFreq(float f)
     {
         osc.setNoteFreq(f);
     };
     
+    void initFMenv(float ca, float cd, float cs, float cr, float ma, float md, float ms, float mr){
+        osc.initFMenv(ca, cd, cs, cr, ma, md, ms, mr);
+    };
     
 private:
-    Envelope ampEnv, pitchEnv;
+    // this will include filters and other kinds of oscillators (other waveforms + LFO)
     SineOscillator osc;
-    int algorithm;
-    //double sampleRate;
 };
 
 #endif /* Voice_h */
