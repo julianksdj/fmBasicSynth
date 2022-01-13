@@ -10,7 +10,7 @@ Currently working on new features.
 - Algorithm selection
 
 ## Installing instructions (Mac OSX):
-- Download:
+- Download: https://drive.google.com/drive/folders/12_0aXYIH9RhdjNzqEVWB4GfGWUiYQ07D?usp=sharing
 - Standalone app: Execute the fmsynth.app
 - VST3: Copy fmsynth.vst3 into your VST3 folder
 - Component: fmsynth.component into your components folder and use it in your DAW
