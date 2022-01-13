@@ -1,23 +1,16 @@
 # FM synthesizer
 
-First working version with the basic features. Currently working on new features.
+Currently working on new features.
 
-![image](https://user-images.githubusercontent.com/66480309/143939829-609b71df-092f-418f-8470-57f9aba9f853.png)
+![image](https://user-images.githubusercontent.com/66480309/149406610-bc77a17f-6ee0-4e3d-9076-e2fbcd4f1810.png)
 
 ## Features:
-	•	Polyphonic FM synthesizer
-	•	Sine wave oscillator for the carrier wave
-	•	Sine wave oscillator for the modulator wave
-	•	Carrier frequency control using the keyboard on the GUI or using the midi input
-	•	Keyboard on the GUI for carrier frequency control (chromatic)
-	•	Midi input for carrier frequency control (chromatic)
-	•	Slider for modulator frequency control
-	•	Slider for modulator amplitude control
-	•	Sliders for carrier amplitude envelope control
+- Polyphonic FM synthesizer
+- 2 operators (sine oscillators)
+- Algorithm selection
 
 ## Installing instructions (Mac OSX):
-
-	•	Download: https://drive.google.com/drive/folders/12_0aXYIH9RhdjNzqEVWB4GfGWUiYQ07D?usp=sharing
-	•	Standalone app: Execute the fmsynth.app
-  	•	VST3: Copy fmsynth.vst3 into your VST3 folder
-	•	Component: fmsynth.component into your components folder and use it in your DAW
+- Download:
+- Standalone app: Execute the fmsynth.app
+- VST3: Copy fmsynth.vst3 into your VST3 folder
+- Component: fmsynth.component into your components folder and use it in your DAW
