@@ -24,23 +24,27 @@ public:
         {
             if (envCount < attackSamples)
             {
-                carrAmp+=(0.125/attackSamples); //the amplitude raises until max amplitude is reached
+                //carrAmp+=(0.125/attackSamples); //the amplitude raises until max amplitude is reached
+                envelope+=(1.f/attackSamples);
             }
             else if (envCount < daSamples)
             {
-                carrAmp-=((0.125-sustainLevel)/decaySamples); //the amplitude decreases until sustain level is reached
+                envelope-=((1.f-sustainLevel)/decaySamples); //the amplitude decreases until sustain level is reached
             }
-            releaseLevel = carrAmp; // saves the amplitude state
+            releaseLevel = envelope; // saves the amplitude state
         }
         else //released note on the keyboard
         {
-            if(carrAmp>0.0000001)
-                carrAmp-=(releaseLevel/releaseSamples); //amplitude decreases until silence
+            if(envelope>0.0000001)
+                envelope-=(releaseLevel/releaseSamples); //amplitude decreases until silence
         }
         envCount++;
-        return carrAmp;
+        return envelope;
     };
-    
+    float getEnvelopeValue()
+    {
+        return envelope;
+    };
     void setAttack(float a)
     {
         attackTime = a;
@@ -69,12 +73,7 @@ public:
         printf("release time %f\n", releaseTime);
         printf("release samples %d\n", releaseSamples);
     };
-    float getCarrAmp(){
-        return carrAmp;
-    };
-    void setCarrAmp(float a){
-        carrAmp=a;
-    };
+
     void setNoteOn(bool n){
         noteOn = n;
     };
@@ -87,7 +86,7 @@ public:
     
 private:
     float currentSampleRate;
-    float carrAmp;
+    float envelope;
     float attackTime, decayTime, sustainLevel, releaseTime;
     int attackSamples, decaySamples, releaseSamples, daSamples;
     int envCount;

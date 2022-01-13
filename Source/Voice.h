@@ -19,7 +19,7 @@ public:
     // voice features functions
     bool isActive ()
     {
-        if (env.getCarrAmp()<=0.0000001)
+        if (ampEnv.getEnvelopeValue()<=0.0000001)
             return false;
         else
             return true;
@@ -38,17 +38,9 @@ public:
     {
         return osc.getNextSample(channel);
     };
-    float getFrequency()
+    float getNoteFreq()
     {
-        return osc.getFrequency();
-    };
-    void setCarrFreq(float m)
-    {
-        osc.setCarrFreq(m);
-    };
-    void setModFreq(float m)
-    {
-        osc.setModFreq(m);
+        return osc.getNoteFreq();
     };
     void setModAmp(float m)
     {
@@ -56,52 +48,69 @@ public:
     };
 
     // envelope functions
-    float getEnvelope()
+    float getAmpEnvelope()
     {
-        return env.getEnvelope();
+        return ampEnv.getEnvelope();
     };
-    void setAttack(float a)
+    void setAmpAttack(float a)
     {
-        env.setAttack(a);
+        ampEnv.setAttack(a);
     };
-    void setDecay(float d)
+    void setAmpDecay(float d)
     {
-        env.setDecay(d);
+        ampEnv.setDecay(d);
     };
-    void setSustain(float s)
+    void setAmpSustain(float s)
     {
-        env.setSustain(s);
+        ampEnv.setSustain(s);
     };
-    void setRelease(float r)
+    void setAmpRelease(float r)
     {
-        env.setRelease(r);
+        ampEnv.setRelease(r);
     };
-    void setSampleRate(int sr)
+    void setPitchAttack(float a)
     {
-        env.setSampleRate(sr);
+        pitchEnv.setAttack(a);
     };
-    void setCarrAmp(float a)
+    void setPitchDecay(float d)
     {
-        env.setCarrAmp(a);
+        pitchEnv.setDecay(d);
+    };
+    void setPitchSustain(float s)
+    {
+        pitchEnv.setSustain(s);
+    };
+    void setPitchRelease(float r)
+    {
+        pitchEnv.setRelease(r);
     };
     void setNoteOn(bool n)
     {
-        env.setNoteOn(n);
+        ampEnv.setNoteOn(n);
+        pitchEnv.setNoteOn(n);
     };
     void resetEnvCount()
     {
-        env.resetEnvCount();
+        ampEnv.resetEnvCount();
+        pitchEnv.resetEnvCount();
     };
     void setSampleRate(float sr)
     {
         osc.setSampleRate(sr);
-        env.setSampleRate(sr);
+        ampEnv.setSampleRate(sr);
+        pitchEnv.setSampleRate(sr);
+        
+    };
+    void setNoteFreq(float f)
+    {
+        osc.setNoteFreq(f);
     };
     
     
 private:
-    Envelope env;
+    Envelope ampEnv, pitchEnv;
     SineOscillator osc;
+    int algorithm;
     //double sampleRate;
 };
 

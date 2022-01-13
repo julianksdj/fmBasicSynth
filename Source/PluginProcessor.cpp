@@ -96,10 +96,21 @@ void FmsynthAudioProcessor::changeProgramName (int index, const juce::String& ne
 void FmsynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     currentSampleRate = sampleRate;
-    attack = 0.0001;
-    decay = 0.0001;
-    sustain = 0.125;
-    release = 0.0001;
+    op1attack = 0.001f;
+    op1decay = 0.001f;
+    op1sustain = 1.f;
+    op1release = 0.001f;
+    op2attack = 0.001f;
+    op2decay = 0.001f;
+    op2sustain = 1.f;
+    op2release = 0.001f;
+    op1amp = 1.f;
+    op2amp = 1.f;
+    op1coarse = 1.f;
+    op2coarse = 1.f;
+    op1fine = 0.f;
+    op2fine = 0.f;
+    algorithm = 1.f;
 }
 
 void FmsynthAudioProcessor::releaseResources()
@@ -152,13 +163,13 @@ void FmsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     {
         if (currentMessage.isNoteOn())
         {
-            printf("\nNOTE PRESSED\n");
-            printf("Received note %d\n",currentMessage.getNoteNumber());
+            //printf("\nNOTE PRESSED\n");
+            //printf("Received note %d\n",currentMessage.getNoteNumber());
             addVoice(juce::MidiMessage::getMidiNoteInHertz(currentMessage.getNoteNumber()));
         }
         else if (currentMessage.isNoteOff())
         {
-            printf("NOTE RELEASED\n");
+            //printf("NOTE RELEASED\n");
             deactivateVoice(juce::MidiMessage::getMidiNoteInHertz(currentMessage.getNoteNumber()));
         }
     }
@@ -169,12 +180,13 @@ void FmsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         auto* channelData = buffer.getWritePointer(channel);
         for (auto sample = 0; sample < buffer.getNumSamples(); ++sample)
         {
-            float sumOsc = 0.0;
+            float sumOsc = 0.f;
             // sum of oscillators
             for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
             {
                 auto* voice = voices.getUnchecked(voiceIndex);
-                auto amp = voice->getEnvelope();
+                auto amp = (voice->getAmpEnvelope())*0.125f;
+                
                 if(voice->isActive())
                 {
                     auto currentSample = voice->getNextSample(channel)*amp;

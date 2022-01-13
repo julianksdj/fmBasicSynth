@@ -12,8 +12,6 @@ class SineOscillator {
 public:
     SineOscillator()
     {
-        modFreq = 500;
-        modAmp = 0.0000001;
     };
     void setFrequency (float frequency)
     {
@@ -38,25 +36,21 @@ public:
             currentAngleFM[channel] -= juce::MathConstants<double>::twoPi;
         return sample;
     };
-    float getFrequency()
+    void setSampleRate(float sr)
     {
-        return carrFreq;
+        currentSampleRate = sr;
     };
-    void setCarrFreq(float m)
+    float getNoteFreq()
     {
-        carrFreq = m;
+        return noteFreq;
     };
-    void setModFreq(float m)
+    void setNoteFreq(float f)
     {
-        modFreq = m;
+        noteFreq = f;
     };
     void setModAmp(float m)
     {
         modAmp = m;
-    };
-    void setSampleRate(float sr)
-    {
-        currentSampleRate = sr;
     };
     
 private:
@@ -66,6 +60,7 @@ private:
     float modFreq;
     float modAmp;
     float modAmpSmoothed;
+    float noteFreq;
 };
 
 #endif /* SineOscillator_h */

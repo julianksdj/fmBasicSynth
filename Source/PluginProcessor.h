@@ -14,6 +14,12 @@
 //==============================================================================
 /**
 */
+
+struct Op {
+    float frec;
+    float amp;
+};
+
 class FmsynthAudioProcessor  : public juce::AudioProcessor
 {
 public:
@@ -65,7 +71,7 @@ public:
     {
         for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
         {
-            if (voices.getUnchecked(voiceIndex)->getFrequency()==frequency)
+            if (voices.getUnchecked(voiceIndex)->getNoteFreq()==frequency)
             {
                 voices.remove(voiceIndex);
             }
@@ -73,22 +79,42 @@ public:
         Voice *voice = new Voice();
         voice->setNoteOn(true);
         voice->setSampleRate(currentSampleRate);
-        voice->setFrequency(frequency);
-        voice->setModFreq(modFreq);
-        voice->setModAmp(modAmp);
-        voice->setFrequencyFM(modFreq);
-        voice->setAttack(attack);
-        voice->setDecay(decay);
-        voice->setSustain(sustain);
-        voice->setRelease(release);
-        voice->getEnvelope();
+        voice->setNoteFreq(frequency);
+        if (algorithm == 1)
+        {
+            voice->setFrequency(op1coarse * frequency + op1fine);
+            voice->setFrequencyFM(op2coarse * frequency + op2fine);
+            voice->setModAmp(op2amp * 0.125f);
+            voice->setAmpAttack(op1attack);
+            voice->setAmpDecay(op1decay);
+            voice->setAmpSustain(op1sustain);
+            voice->setAmpRelease(op1release);
+            voice->setPitchAttack(op2attack);
+            voice->setPitchDecay(op2decay);
+            voice->setPitchSustain(op2sustain);
+            voice->setPitchRelease(op2release);
+        }
+        else if (algorithm == 2)
+        {
+            voice->setFrequency(op2coarse * frequency + op2fine);
+            voice->setFrequencyFM(op1coarse * frequency + op1fine);
+            voice->setModAmp(op1amp * 0.125f);
+            voice->setAmpAttack(op2attack);
+            voice->setAmpDecay(op2decay);
+            voice->setAmpSustain(op2sustain);
+            voice->setAmpRelease(op2release);
+            voice->setPitchAttack(op1attack);
+            voice->setPitchDecay(op1decay);
+            voice->setPitchSustain(op1sustain);
+            voice->setPitchRelease(op1release);
+        }
         voices.add(voice);
     };
     void deactivateVoice(float freq)
     {
         for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
         {
-            if (voices[voiceIndex]->getFrequency() == freq)
+            if (voices[voiceIndex]->getNoteFreq() == freq)
             {
                 voices[voiceIndex]->setNoteOn(false);
                 voices[voiceIndex]->resetEnvCount();
@@ -99,58 +125,140 @@ public:
     {
         for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
         {
-            if (voices[voiceIndex]->getFrequency() == freq)
+            if (voices[voiceIndex]->getNoteFreq() == freq)
                 voices.remove(voiceIndex);
         }
     };
-    void setAttack(float a)
+    
+    void setOp1attack(float a)
     {
-        attack = a;
+        op1attack = a;
     };
-    void setDecay(float d)
+    void setOp1decay(float d)
     {
-        decay = d;
+        op1decay = d;
     };
-    void setSustain(float s)
+    void setOp1sustain(float s)
     {
-        sustain = s;
+        op1sustain = s;
     };
-    void setRelease(float r)
+    void setOp1release(float r)
     {
-        release = r;
+        op1release = r;
     };
-    float getAttack()
+    void setOp2attack(float a)
     {
-        return attack;
+        op1attack = a;
     };
-    float getDecay()
+    void setOp2decay(float d)
     {
-        return decay;
+        op1decay = d;
     };
-    float getSustain()
+    void setOp2sustain(float s)
     {
-        return sustain;
+        op1sustain = s;
     };
-    float getRelease()
+    void setOp2release(float r)
     {
-        return release;
+        op1release = r;
     };
-    void setModFreq(float mod)
+    
+    float getOp1attack()
     {
-        modFreq = mod;
+        return op1attack;
     };
-    void setModAmp(float mod)
+    float getOp1decay()
     {
-        modAmp = mod;
+        return op1decay;
     };
-    float getModFreq()
+    float getOp1sustain()
     {
-        return modFreq;
+        return op1sustain;
     };
-    float getModAmp()
+    float getOp1release()
     {
-        return modAmp;
+        return op1release;
     };
+    float getOp2attack()
+    {
+        return op2attack;
+    };
+    float getOp2decay()
+    {
+        return op2decay;
+    };
+    float getOp2sustain()
+    {
+        return op2sustain;
+    };
+    float getOp2release()
+    {
+        return op2release;
+    };
+
+    float getOp1Amp()
+    {
+        return op1amp;
+    };
+    float getOp2Amp()
+    {
+        return op2amp;
+    };
+    
+    void setOp1Amp(float amp)
+    {
+        op1amp = amp;
+    };
+    void setOp2Amp(float amp)
+    {
+        op2amp = amp;
+    };
+    
+    void setOp1Coarse(float c)
+    {
+        op1coarse = c;
+    };
+    void setOp2Coarse(float c)
+    {
+        op2coarse = c;
+    };
+    
+    float getOp1Coarse()
+    {
+        return op1coarse;
+    };
+    float getOp2Coarse()
+    {
+        return op2coarse;
+    };
+    
+    void setOp1Fine(float f)
+    {
+        op1fine = f;
+    };
+    void setOp2Fine(float f)
+    {
+        op2fine = f;
+    };
+    
+    float getOp1Fine()
+    {
+        return op1fine;
+    };
+    float getOp2Fine()
+    {
+        return op1fine;
+    };
+    
+    int getAlgorithm()
+    {
+        return algorithm;
+    };
+    void setAlgorithm(int algo)
+    {
+        algorithm = algo;
+    };
+    
 
     
 private:
@@ -158,9 +266,13 @@ private:
     juce::OwnedArray<Voice> voices; //voices array
     
     // GUI parameters
-    float attack, decay, sustain, release;
-    float modFreq, modAmp;
-    
+    float op1attack, op1decay, op1sustain, op1release;
+    float op2attack, op2decay, op2sustain, op2release;
+    float op1amp, op2amp;
+    float op1coarse, op2coarse;
+    float op1fine, op2fine;
+    int algorithm;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FmsynthAudioProcessor)
 };

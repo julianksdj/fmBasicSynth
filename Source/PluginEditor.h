@@ -32,6 +32,20 @@ public:
     void handleNoteOff (juce::MidiKeyboardState* source, int midiChannel, int midiNoteNumber, float velocity) override;
     
     void setMidiInput (int index);
+    
+    void algoMenuChanged()
+    {
+        switch (algoMenu.getSelectedId())
+        {
+            case 1:
+                audioProcessor.setAlgorithm(1);
+                break;
+            case 2:
+                audioProcessor.setAlgorithm(2);
+                break;
+            default: break;
+        }
+    }
 
 private:
     // This reference is provided as a quick way for your editor to
@@ -39,20 +53,33 @@ private:
     FmsynthAudioProcessor& audioProcessor;
 
     //==============================================================================
-    juce::Slider modulatorFreqSlider;
-    juce::Label  modulatorFreqLabel;
-    juce::Slider modulatorAmpSlider;
-    juce::Label  modulatorAmpLabel;
+    juce::Slider op1AmpKnob;
+    juce::Slider op1CoarseKnob;
+    juce::Slider op1FineKnob;
+    juce::Slider op2AmpKnob;
+    juce::Slider op2CoarseKnob;
+    juce::Slider op2FineKnob;
     
-    //carrier Envelope GUI
-    juce::Slider carrierASlider;
-    juce::Label  carrierALabel;
-    juce::Slider carrierDSlider;
-    juce::Label  carrierDLabel;
-    juce::Slider carrierSSlider;
-    juce::Label  carrierSLabel;
-    juce::Slider carrierRSlider;
-    juce::Label  carrierRLabel;
+    juce::Slider op1ASlider;
+    juce::Slider op1DSlider;
+    juce::Slider op1SSlider;
+    juce::Slider op1RSlider;
+    
+    juce::Slider op2ASlider;
+    juce::Slider op2DSlider;
+    juce::Slider op2SSlider;
+    juce::Slider op2RSlider;
+    
+    juce::Label ampLabel;
+    juce::Label coarseLabel;
+    juce::Label fineLabel;
+    juce::Label aLabel, dLabel, sLabel, rLabel;
+    juce::Label op1Label;
+    juce::Label op2Label;
+    
+    //Algorithm selection
+    juce::Label algoLabel;
+    juce::ComboBox algoMenu;
 
     juce::MidiKeyboardState keyboardState;
     juce::MidiKeyboardComponent keyboardComponent;
