@@ -15,11 +15,6 @@
 /**
 */
 
-struct Op {
-    float frec;
-    float amp;
-};
-
 class FmsynthAudioProcessor  : public juce::AudioProcessor
 {
 public:
