@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="RIAd6S" name="fmsynth" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="xtuqRK" name="fmsynth">
     <GROUP id="{FF1AFD43-AF55-74E5-3811-208DDBDFEB06}" name="Source">
       <FILE id="rqnh8i" name="PluginProcessor.cpp" compile="1" resource="0"
