@@ -28,14 +28,14 @@ public:
     };
     float getNextSample(int channel)
     {
-        float sample = 0.125f * carAmp * std::sin(currentAngle[channel] + 10.f * modAmp * std::cos(currentAngleFM[channel]));
+        float sample = 0.0125f * carAmp[channel] * std::sin(currentAngle[channel] + modAmp[channel] * std::cos(currentAngleFM[channel]));
         currentAngle[channel] += angleDelta;
         currentAngleFM[channel] += angleDeltaFM;
         if (currentAngle[channel]>=juce::MathConstants<double>::twoPi)
             currentAngle[channel] -= juce::MathConstants<double>::twoPi;
         if (currentAngleFM[channel]>=juce::MathConstants<double>::twoPi)
             currentAngleFM[channel] -= juce::MathConstants<double>::twoPi;
-        updateFM();
+        updateFM(channel);
         return sample;
     };
     void setSampleRate(float sr)
@@ -52,12 +52,14 @@ public:
     };
     void setModAmp(float m)
     {
-        modAmp = m;
+        modAmp[0] = m;
+        modAmp[1] = m;
         modAmp0 = m;
     };
     void setCarAmp(float m)
     {
-        carAmp = m;
+        carAmp[0] = m;
+        carAmp[1] = m;
         carAmp0 = m;
     };
     // Envolvente de pitch (futura implementacion)
@@ -69,10 +71,10 @@ public:
             currentFreqFM = 20.f;
         setFrequencyFM(currentFreqFM);
     };*/
-    void updateFM()
+    void updateFM(int channel)
     {
-        carAmp = carAmp0 * ampEnv.getEnvelope();
-        modAmp = modAmp0 * fmEnv.getEnvelope();
+        carAmp[channel] = carAmp0 * ampEnv.getEnvelope(channel);
+        modAmp[channel] = modAmp0 * fmEnv.getEnvelope(channel);
     };
     void initFMenv(float ca, float cd, float cs, float cr, float ma, float md, float ms, float mr)
     {
@@ -105,7 +107,7 @@ public:
     };
     bool isActive()
     {
-        if (ampEnv.getEnvelopeValue()<=0.0000001f)
+        if (ampEnv.getFin())
             return false;
         else
             return true;
@@ -116,7 +118,7 @@ private:
     float currentSampleRate;
     float carrFreq;
     float modFreq;
-    float carAmp, modAmp;
+    float carAmp[2], modAmp[2];
     float modAmpSmoothed;
     float noteFreq; //, noteFreqFM;
     float carAmp0, modAmp0;

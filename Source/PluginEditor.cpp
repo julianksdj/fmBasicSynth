@@ -16,8 +16,10 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
+    //auto windowWidth = 500;
+    //auto windowHeight = 230;
     auto windowWidth = 500;
-    auto windowHeight = 230;
+    auto windowHeight = 300;
     
     setSize (windowWidth, windowHeight);
     
@@ -40,19 +42,21 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     
     //OP1 amplitude
     addAndMakeVisible (op1AmpKnob);
-    op1AmpKnob.setNormalisableRange(juce::NormalisableRange<double>(0.f, 1.f, 0.01f, 1.f));
+    op1AmpKnob.setNormalisableRange(juce::NormalisableRange<double>(0.f, 10.f, 0.01f, 1.f));
     op1AmpKnob.addListener (this);
     op1AmpKnob.setValue(audioProcessor.getOp1Amp());
-    op1AmpKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    op1AmpKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     op1AmpKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
+    op1AmpKnob.setLookAndFeel(&customLook);
     
     //OP1 coarse
     addAndMakeVisible (op1CoarseKnob);
     op1CoarseKnob.setNormalisableRange(juce::NormalisableRange<double>(0.25f, 6.f, 0.25, 1.f));
     op1CoarseKnob.addListener (this);
     op1CoarseKnob.setValue(audioProcessor.getOp1Coarse());
-    op1CoarseKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    op1CoarseKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     op1CoarseKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
+    op1CoarseKnob.setLookAndFeel(&customLook);
     
     //OP1 fine
     addAndMakeVisible (op1FineKnob);
@@ -60,32 +64,36 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     //op1CoarseKnob.setTextValueSuffix (" Hz");
     op1FineKnob.addListener (this);
     op1FineKnob.setValue(audioProcessor.getOp1Fine());
-    op1FineKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    op1FineKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     op1FineKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
+    op1FineKnob.setLookAndFeel(&customLook);
     
     //OP2 amplitude
     addAndMakeVisible (op2AmpKnob);
-    op2AmpKnob.setNormalisableRange(juce::NormalisableRange<double>(0.f, 1.f, 0.01f, 1.f));
+    op2AmpKnob.setNormalisableRange(juce::NormalisableRange<double>(0.f, 10.f, 0.01f, 1.f));
     op2AmpKnob.addListener (this);
     op2AmpKnob.setValue(audioProcessor.getOp2Amp());
-    op2AmpKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    op2AmpKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     op2AmpKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
+    op2AmpKnob.setLookAndFeel(&customLook);
     
     //OP2 coarse
     addAndMakeVisible (op2CoarseKnob);
     op2CoarseKnob.setNormalisableRange(juce::NormalisableRange<double>(0.25f, 6.f, 0.25, 1.f));
     op2CoarseKnob.addListener (this);
     op2CoarseKnob.setValue(audioProcessor.getOp2Coarse());
-    op2CoarseKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    op2CoarseKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     op2CoarseKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
+    op2CoarseKnob.setLookAndFeel(&customLook);
     
     //OP2 fine
     addAndMakeVisible (op2FineKnob);
     op2FineKnob.setNormalisableRange(juce::NormalisableRange<double>(-12.f, 12.f, 0.1f, 1.f));
     op2FineKnob.addListener (this);
     op2FineKnob.setValue(audioProcessor.getOp2Fine());
-    op2FineKnob.setSliderStyle(juce::Slider::SliderStyle::Rotary);
+    op2FineKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);
     op2FineKnob.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::TextBoxBelow, true, 50, 13);
+    op2FineKnob.setLookAndFeel(&customLook);
     
     //keyboard
     addAndMakeVisible (keyboardComponent);
@@ -115,24 +123,28 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     op1ASlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op1ASlider.addListener (this);
     op1ASlider.setValue(audioProcessor.getOp1attack());
+    op1ASlider.setLookAndFeel(&customLook);
     //decay slider
     op1DSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op1DSlider);
     op1DSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op1DSlider.addListener (this);
     op1DSlider.setValue(audioProcessor.getOp1decay());
+    op1DSlider.setLookAndFeel(&customLook);
     //sustain slider
     op1SSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op1SSlider);
     op1SSlider.setNormalisableRange(juce::NormalisableRange<double>(0.f, 1.f, 0.0001f, 1.f));
     op1SSlider.addListener (this);
     op1SSlider.setValue(audioProcessor.getOp1sustain());
+    op1SSlider.setLookAndFeel(&customLook);
     //release slider
     op1RSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op1RSlider);
     op1RSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op1RSlider.addListener (this);
-    op1ASlider.setValue(audioProcessor.getOp1release());
+    op1RSlider.setValue(audioProcessor.getOp1release());
+    op1RSlider.setLookAndFeel(&customLook);
     //OP2 envelope
     //attack slider
     op2ASlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
@@ -140,24 +152,28 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     op2ASlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op2ASlider.addListener (this);
     op2ASlider.setValue(audioProcessor.getOp2attack());
+    op2ASlider.setLookAndFeel(&customLook);
     //decay slider
     op2DSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op2DSlider);
     op2DSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op2DSlider.addListener (this);
     op2DSlider.setValue(audioProcessor.getOp2decay());
+    op2DSlider.setLookAndFeel(&customLook);
     //sustain slider
     op2SSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op2SSlider);
     op2SSlider.setNormalisableRange(juce::NormalisableRange<double>(0.f, 1.f, 0.0001f, 1.f));
     op2SSlider.addListener (this);
     op2SSlider.setValue(audioProcessor.getOp2sustain());
+    op2SSlider.setLookAndFeel(&customLook);
     //release slider
     op2RSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op2RSlider);
     op2RSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
     op2RSlider.addListener (this);
-    op2ASlider.setValue(audioProcessor.getOp2release());
+    op2RSlider.setValue(audioProcessor.getOp2release());
+    op2RSlider.setLookAndFeel(&customLook);
     
     //combobox algorithm
     addAndMakeVisible (algoLabel);
@@ -168,19 +184,21 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     algoMenu.addItem ("OP1 -> OP2",  2);
     algoMenu.onChange = [this] { algoMenuChanged(); };
     algoMenu.setSelectedId(audioProcessor.getAlgorithm());
-    
 }
 
 FmsynthAudioProcessorEditor::~FmsynthAudioProcessorEditor()
 {
+    setLookAndFeel(nullptr);
 }
 
 //==============================================================================
 void FmsynthAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    g.fillAll(getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
+    g.fillAll(juce::Colours::black);
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
+    juce::Image background = juce::ImageCache::getFromMemory (BinaryData::background_png, BinaryData::background_pngSize);
+    g.drawImageAt (background, 0, 0);
 }
 
 void FmsynthAudioProcessorEditor::resized()

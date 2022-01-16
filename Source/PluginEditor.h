@@ -10,10 +10,8 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "CustomLookAndFeel.h"
 
-//==============================================================================
-/**
-*/
 class FmsynthAudioProcessorEditor  : public juce::AudioProcessorEditor,
                                      public juce::Slider::Listener,
                                      private juce::MidiKeyboardStateListener
@@ -48,11 +46,9 @@ public:
     }
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    CustomLookAndFeel customLook;
     FmsynthAudioProcessor& audioProcessor;
 
-    //==============================================================================
     juce::Slider op1AmpKnob;
     juce::Slider op1CoarseKnob;
     juce::Slider op1FineKnob;
