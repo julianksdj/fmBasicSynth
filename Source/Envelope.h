@@ -14,37 +14,38 @@ class Envelope
 public:
     Envelope()
     {
-        envCount = 0;
-        envelope = 0.0000002f;
+        envCount[0] = 0;
+        envCount[1] = 0;
+        envelope[0] = 0.0000002f;
+        envelope[1] = 0.0000002f;
+        fin = false;
     };
     
-    float getEnvelope()
+    float getEnvelope(int channel)
     {
         //Calculate envelope
         if(noteOn==true) //pressed note on the keyboard
         {
-            if (envCount < attackSamples)
+            if (envCount[channel] < attackSamples)
             {
                 //the amplitude raises until max amplitude is reached
-                envelope+=(1.f/attackSamples);
+                envelope[channel]+=(1.f/attackSamples);
             }
-            else if (envCount < daSamples)
+            else if (envCount[channel] < daSamples)
             {
-                envelope-=((1.f-sustainLevel)/decaySamples); //the amplitude decreases until sustain level is reached
+                envelope[channel]-=((1.f-sustainLevel)/decaySamples); //the amplitude decreases until sustain level is reached
             }
-            releaseLevel = envelope; // saves the amplitude state
+            releaseLevel[channel] = envelope[channel]; // saves the amplitude state
         }
         else //released note on the keyboard
         {
-            if(envelope>0.0000001)
-                envelope-=(releaseLevel/releaseSamples); //amplitude decreases until silence
+            if(envelope[channel]>releaseLevel[channel]/releaseSamples)
+                envelope[channel]-=(releaseLevel[channel]/releaseSamples); //amplitude decreases until silence
+            else
+                fin = true;
         }
-        envCount++;
-        return envelope;
-    };
-    float getEnvelopeValue()
-    {
-        return envelope;
+        envCount[channel]++;
+        return envelope[channel];
     };
     void setAttack(float a)
     {
@@ -79,20 +80,25 @@ public:
         noteOn = n;
     };
     void resetEnvCount(){
-        envCount = 0;
+        envCount[0] = 0;
+        envCount[1] = 0;
     };
     void setSampleRate(float sr){
         currentSampleRate = sr;
     };
+    bool getFin(){
+        return fin;
+    };
     
 private:
     float currentSampleRate;
-    float envelope;
+    float envelope[2];
     float attackTime, decayTime, sustainLevel, releaseTime;
     int attackSamples, decaySamples, releaseSamples, daSamples;
-    int envCount;
+    int envCount[2];
     bool noteOn;
-    float releaseLevel;
+    float releaseLevel[2];
+    bool fin;
 };
 
 
