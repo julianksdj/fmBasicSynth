@@ -76,6 +76,7 @@ public:
     void updateFM(int channel)
     {
         carAmp[channel] = carAmp0 * ampEnv.getEnvelope(channel);
+        carAmp2[channel] = carAmp02 * ampEnv.getEnvelope(channel);
         modAmp[channel] = modAmp0 * fmEnv.getEnvelope(channel);
     };
     void initFMenv(float ca, float cd, float cs, float cr, float ma, float md, float ms, float mr)
