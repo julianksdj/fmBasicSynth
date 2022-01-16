@@ -2,7 +2,7 @@
 
 Currently working on new features.
 
-![image](https://user-images.githubusercontent.com/66480309/149407193-d0f3bd3e-e483-4469-8edf-5071506ef588.png)
+![image](https://user-images.githubusercontent.com/66480309/149680092-c800e1cc-072e-4a5d-bb1a-3467053473dc.png)
 
 ## Features:
 - Polyphonic FM synthesizer
