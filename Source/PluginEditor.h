@@ -31,7 +31,9 @@ public:
     
     void setMidiInput (int index);
     
-    void algoMenuChanged()
+    void updateToggleState (juce::Button* button, juce::String name);
+    
+    /*void algoMenuChanged()
     {
         switch (algoMenu.getSelectedId())
         {
@@ -43,7 +45,7 @@ public:
                 break;
             default: break;
         }
-    }
+    }*/
 
 private:
     CustomLookAndFeel customLook;
@@ -72,15 +74,18 @@ private:
     juce::Label aLabel, dLabel, sLabel, rLabel;
     juce::Label op1Label;
     juce::Label op2Label;
-    
-    //Algorithm selection
-    juce::Label algoLabel;
-    juce::ComboBox algoMenu;
 
     juce::MidiKeyboardState keyboardState;
     juce::MidiKeyboardComponent keyboardComponent;
     
     juce::AudioDeviceManager deviceManager;
+    
+    //Algorithm selection
+    juce::Label algoLabel;
+    //juce::ComboBox algoMenu;
+    juce::ToggleButton algoButton1;
+    juce::ToggleButton algoButton2;
+    juce::ToggleButton algoButton3;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FmsynthAudioProcessorEditor)
 };

@@ -73,6 +73,15 @@ public:
         osc.initFMenv(ca, cd, cs, cr, ma, md, ms, mr);
     };
     
+    void setFrequency2(float f)
+    {
+        osc.setFrequency2(f);
+    };
+    void setCarAmp2(float a)
+    {
+        osc.setCarAmp2(a);
+    };
+    
 private:
     // this will include filters and other kinds of oscillators (other waveforms + LFO)
     SineOscillator osc;

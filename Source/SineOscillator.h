@@ -29,7 +29,9 @@ public:
     float getNextSample(int channel)
     {
         float sample = 0.0125f * carAmp[channel] * std::sin(currentAngle[channel] + modAmp[channel] * std::cos(currentAngleFM[channel]));
+        sample += 0.0125f * carAmp2[channel] * std::sin(currentAngle2[channel]);
         currentAngle[channel] += angleDelta;
+        currentAngle2[channel] += angleDelta2;
         currentAngleFM[channel] += angleDeltaFM;
         if (currentAngle[channel]>=juce::MathConstants<double>::twoPi)
             currentAngle[channel] -= juce::MathConstants<double>::twoPi;
@@ -112,6 +114,18 @@ public:
         else
             return true;
     };
+    void setFrequency2(float frequency)
+    {
+        carrFreq2=frequency;
+        auto cyclesPerSample = frequency / currentSampleRate;
+        angleDelta2 = cyclesPerSample * juce::MathConstants<double>::twoPi;
+    };
+    void setCarAmp2(float m)
+    {
+        carAmp2[0] = m;
+        carAmp2[1] = m;
+        carAmp02 = m;
+    };
     
 private:
     float currentAngle[2], currentAngleFM[2], angleDelta, angleDeltaFM;
@@ -125,6 +139,12 @@ private:
     
     Envelope fmEnv, ampEnv;
     //float currentFreq, currentFreqFM;
+    float carrFreq2;
+    float noteFreq2;
+    float carAmp2[2];
+    float angleDelta2;
+    float carAmp02;
+    float currentAngle2[2];
 };
 
 #endif /* SineOscillator_h */

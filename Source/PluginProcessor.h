@@ -91,6 +91,15 @@ public:
             voice->setCarAmp(op2amp);
             voice->setModAmp(op1amp);
         }
+        else if (algorithm == 3)
+        {
+            voice->setFrequency(op1coarse * frequency + op1fine);
+            voice->setFrequency2(op2coarse * frequency + op2fine);
+            voice->setFrequencyFM(0.f);
+            voice->initFMenv(op1attack, op1decay, op1sustain, op1release, 0.f, 0.f, 0.f, 0.f);
+            voice->setCarAmp(op1amp);
+            voice->setCarAmp2(op2amp);
+        }
         voices.add(voice);
     };
     void deactivateVoice(float freq)

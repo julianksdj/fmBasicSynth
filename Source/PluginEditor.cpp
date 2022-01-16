@@ -19,10 +19,29 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     //auto windowWidth = 500;
     //auto windowHeight = 230;
     auto windowWidth = 500;
-    auto windowHeight = 300;
+    auto windowHeight = 230;
     
     setSize (windowWidth, windowHeight);
     
+    addAndMakeVisible (algoButton1);
+    algoButton1.setLookAndFeel(&customLook);
+    algoButton1.onClick = [this] { updateToggleState (&algoButton1, "algorithm1"); };
+    algoButton1.setButtonText("1");
+    addAndMakeVisible (algoButton2);
+    algoButton2.setLookAndFeel(&customLook);
+    algoButton2.onClick = [this] { updateToggleState (&algoButton2, "algorithm2"); };
+    algoButton2.setButtonText("2");
+    addAndMakeVisible (algoButton3);
+    algoButton3.setLookAndFeel(&customLook);
+    algoButton3.onClick = [this] { updateToggleState (&algoButton2, "algorithm3"); };
+    algoButton3.setButtonText("3");
+    
+    
+    // 0,162,26
+    customLook.setColour (juce::Slider::thumbColourId, juce::Colour(0,153,138));
+    customLook.setColour (juce::Slider::trackColourId, juce::Colour(58,43,43));
+    customLook.setColour (juce::Slider::backgroundColourId, juce::Colour(6,4,4));
+                          
     // frequency labels
     ampLabel.setText ("Amp", juce::dontSendNotification);
     ampLabel.setJustificationType(juce::Justification::centred);
@@ -179,11 +198,11 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     addAndMakeVisible (algoLabel);
     algoLabel.setText("Algorithm", juce::dontSendNotification);
     algoLabel.setJustificationType(juce::Justification::centred);
-    addAndMakeVisible (algoMenu);
-    algoMenu.addItem ("OP1 <- OP2",  1);
-    algoMenu.addItem ("OP1 -> OP2",  2);
-    algoMenu.onChange = [this] { algoMenuChanged(); };
-    algoMenu.setSelectedId(audioProcessor.getAlgorithm());
+    //addAndMakeVisible (algoMenu);
+    //algoMenu.addItem ("OP1 <- OP2",  1);
+    //algoMenu.addItem ("OP1 -> OP2",  2);
+    //algoMenu.onChange = [this] { algoMenuChanged(); };
+    //algoMenu.setSelectedId(audioProcessor.getAlgorithm());
 }
 
 FmsynthAudioProcessorEditor::~FmsynthAudioProcessorEditor()
@@ -197,8 +216,30 @@ void FmsynthAudioProcessorEditor::paint (juce::Graphics& g)
     g.fillAll(juce::Colours::black);
     g.setColour (juce::Colours::white);
     g.setFont (15.0f);
-    juce::Image background = juce::ImageCache::getFromMemory (BinaryData::background_png, BinaryData::background_pngSize);
+    juce::Image background = juce::ImageCache::getFromMemory (BinaryData::backgroundDX_png, BinaryData::backgroundDX_pngSize);
     g.drawImageAt (background, 0, 0);
+    juce::Image algorithmChart = juce::ImageCache::getFromMemory (BinaryData::algorithms_png, BinaryData::algorithms_pngSize);
+    g.drawImage (algorithmChart,                      //const Image &imageToDraw. the image to overlay
+                 355,                  //int destX. the left of the destination rectangle
+                 30,                  //int destY. the top of the destination rectangle
+                 algorithmChart.getWidth()*0.50f,//width,                     //int destWidth. the width of the destination rectangle
+                 algorithmChart.getHeight()*0.50f,//height,                    //int destHeight. the height of the destination rectangle
+                 0,                         //int sourceX. the left of the rectangle to copy from the source image
+                 0,  //int sourceY. the top of the rectangle to copy from the source image
+                 algorithmChart.getWidth(),           //int sourceWidth
+                 algorithmChart.getHeight(),           //int sourceHeight
+                 false);                    //bool fillAlphaChannelWithCurrentBrush=false
+    juce::Image logoImage = juce::ImageCache::getFromMemory (BinaryData::logo_png, BinaryData::logo_pngSize);
+    g.drawImage (logoImage,                      //const Image &imageToDraw. the image to overlay
+                 355,                  //int destX. the left of the destination rectangle
+                 116,                  //int destY. the top of the destination rectangle
+                 logoImage.getWidth()*0.15f,//width,                     //int destWidth. the width of the destination rectangle
+                 logoImage.getHeight()*0.15f,//height,                    //int destHeight. the height of the destination rectangle
+                 0,                         //int sourceX. the left of the rectangle to copy from the source image
+                 0,  //int sourceY. the top of the rectangle to copy from the source image
+                 logoImage.getWidth(),           //int sourceWidth
+                 logoImage.getHeight(),           //int sourceHeight
+                 false);                    //bool fillAlphaChannelWithCurrentBrush=false
 }
 
 void FmsynthAudioProcessorEditor::resized()
@@ -208,6 +249,7 @@ void FmsynthAudioProcessorEditor::resized()
     auto sliderHeight = 100;
     auto knobWidth = 70;
     auto knobHeight = 70;
+    auto buttonWidth = 40;
     
     ampLabel.setBounds(border, 5, knobWidth, 15);
     coarseLabel.setBounds(border+knobWidth, 5, knobWidth, 15);
@@ -240,8 +282,12 @@ void FmsynthAudioProcessorEditor::resized()
     op2SSlider.setBounds(border+knobWidth*3+sliderWidth*2, border+knobHeight, 20, 70);
     op2RSlider.setBounds(border+knobWidth*3+sliderWidth*3, border+knobHeight, 20, 70);
 
-    algoLabel.setBounds(70+knobWidth*3+sliderWidth*4, getHeight()/4, 100, 20);
-    algoMenu.setBounds(70+knobWidth*3+sliderWidth*4, getHeight()/4+20, 100, 20);
+    algoLabel.setBounds(65+knobWidth*3+sliderWidth*4, 5, 100, 20);
+    //algoMenu.setBounds(70+knobWidth*3+sliderWidth*4, getHeight()/4+20, 100, 20);
+    
+    algoButton1.setBounds(35+knobWidth*3+sliderWidth*5, getHeight()/4+20, buttonWidth, buttonWidth);
+    algoButton2.setBounds(35+knobWidth*3+sliderWidth*5+buttonWidth, getHeight()/4+20, buttonWidth, buttonWidth);
+    algoButton3.setBounds(35+knobWidth*3+sliderWidth*5+buttonWidth*2, getHeight()/4+20, buttonWidth, buttonWidth);
 }
 
 void FmsynthAudioProcessorEditor::sliderValueChanged(juce::Slider *slider)
@@ -321,3 +367,24 @@ void FmsynthAudioProcessorEditor::handleNoteOff (juce::MidiKeyboardState* source
     audioProcessor.deactivateVoice(nota);
 }
 
+void FmsynthAudioProcessorEditor::updateToggleState (juce::Button* button, juce::String name)
+{
+        //auto state = tb.getToggleState();
+        //juce::String stateString    = state ? "ON" : "OFF";
+        //juce::String selectedString = state ? " (selected)" : "";
+ 
+        //juce::Logger::outputDebugString (name + " Button changed to " + stateString);
+        //button->setButtonText (name + selectedString);
+    if (name == "algorithm1")
+    {
+        audioProcessor.setAlgorithm(1);
+    }
+    else if (name == "algorithm2")
+    {
+        audioProcessor.setAlgorithm(2);
+    }
+    else if (name == "algorithm3")
+    {
+        audioProcessor.setAlgorithm(3);
+    }
+}

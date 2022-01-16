@@ -24,7 +24,7 @@ public:
                                      float     rotaryEndAngle,
                                      juce::Slider &     slider) override
     {
-        juce::Image knob = juce::ImageCache::getFromMemory (BinaryData::knob2_png, BinaryData::knob2_pngSize);
+        juce::Image knob = juce::ImageCache::getFromMemory (BinaryData::knobdxblue_png, BinaryData::knobdxblue_pngSize);
         const double fractRotation = (slider.getValue() - slider.getMinimum()) / (slider.getMaximum() - slider.getMinimum()); //value between 0 and 1 for current amount of rotation
         const int nFrames = knob.getHeight()/knob.getWidth(); // number of frames for vertical knob
         const int frameIdx = (int)ceil(fractRotation * ((double)nFrames-1.0) ); // current index from 0 --> nFrames-1
@@ -46,4 +46,47 @@ public:
                      knob.getWidth(),           //int sourceHeight
                      false);                    //bool fillAlphaChannelWithCurrentBrush=false
     };
+    
+    virtual void drawToggleButton (juce::Graphics& g,
+                                   juce::ToggleButton& button,
+                                   bool shouldDrawButtonAsHighlighted,
+                                   bool shouldDrawButtonAsDown) override
+    {
+        juce::Image dxButtonOn = juce::ImageCache::getFromMemory (BinaryData::buttondxblueOn_png, BinaryData::buttondxblueOn_pngSize);
+        juce::Image dxButtonOff = juce::ImageCache::getFromMemory (BinaryData::buttondxblueOff_png, BinaryData::buttondxblueOff_pngSize);
+        juce::Image dxButton;
+        
+        if(shouldDrawButtonAsDown)
+        {
+            dxButton = dxButtonOn;
+        }
+        else
+        {
+            dxButton = dxButtonOff;
+        }
+        
+        g.drawImage (dxButton,                      //const Image &imageToDraw. the image to overlay
+                    0,                  //int destX. the left of the destination rectangle
+                    0,                  //int destY. the top of the destination rectangle
+                    button.getWidth(),//width,                     //int destWidth. the width of the destination rectangle
+                    button.getHeight(),//height,                    //int destHeight. the height of the destination rectangle
+                    0,                         //int sourceX. the left of the rectangle to copy from the source image
+                    0,  //int sourceY. the top of the rectangle to copy from the source image
+                    dxButton.getWidth(),           //int sourceWidth
+                    dxButton.getWidth(),           //int sourceHeight
+                    false);                    //bool fillAlphaChannelWithCurrentBrush=false
+        // text:
+        auto fontSize = juce::jmin (15.0f, (float) button.getHeight() * 0.75f);
+
+        g.setColour (juce::Colours::white);
+        g.setFont (fontSize);
+
+        //if (! button.isEnabled())
+        //    g.setOpacity (0.5f);
+
+        g.drawFittedText (button.getButtonText(),
+                          button.getLocalBounds().withTrimmedLeft (5)
+                                                 .withTrimmedRight (2),
+                          juce::Justification::centredLeft, 10);
+    }
 };
