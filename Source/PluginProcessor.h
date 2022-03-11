@@ -77,8 +77,8 @@ public:
         voice->setNoteFreq(frequency);
         if (algorithm == 1)
         {
-            voice->setFrequency(op1coarse * frequency + op1fine);
-            voice->setFrequencyFM(op2coarse * frequency + op2fine);
+            voice->setFrequency((op1coarse + op1fine) * frequency );
+            voice->setFrequencyFM((op2coarse + op2fine) * frequency);
             voice->initFMenv(op1attack, op1decay, op1sustain, op1release, op2attack, op2decay, op2sustain, op2release);
             voice->setCarAmp(op1amp);
             voice->setModAmp(op2amp);

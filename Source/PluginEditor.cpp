@@ -79,7 +79,7 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     
     //OP1 fine
     addAndMakeVisible (op1FineKnob);
-    op1FineKnob.setNormalisableRange(juce::NormalisableRange<double>(-12.f, 12.f, 0.1f, 1.f));
+    op1FineKnob.setNormalisableRange(juce::NormalisableRange<double>(-0.99f, 0.99f, 0.01f, 1.f));
     //op1CoarseKnob.setTextValueSuffix (" Hz");
     op1FineKnob.addListener (this);
     op1FineKnob.setValue(audioProcessor.getOp1Fine());
@@ -107,7 +107,7 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     
     //OP2 fine
     addAndMakeVisible (op2FineKnob);
-    op2FineKnob.setNormalisableRange(juce::NormalisableRange<double>(-12.f, 12.f, 0.1f, 1.f));
+    op2FineKnob.setNormalisableRange(juce::NormalisableRange<double>(-0.99f, 0.99f, 0.01f, 1.f));
     op2FineKnob.addListener (this);
     op2FineKnob.setValue(audioProcessor.getOp2Fine());
     op2FineKnob.setSliderStyle(juce::Slider::SliderStyle::RotaryVerticalDrag);

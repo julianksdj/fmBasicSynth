@@ -5,6 +5,12 @@
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
   <MAINGROUP id="xtuqRK" name="fmsynth">
     <GROUP id="{FF1AFD43-AF55-74E5-3811-208DDBDFEB06}" name="Source">
+      <FILE id="qmIM6p" name="CustomLookAndFeel.h" compile="0" resource="0"
+            file="Source/CustomLookAndFeel.h"/>
+      <FILE id="FfHk8k" name="Envelope.h" compile="0" resource="0" file="Source/Envelope.h"/>
+      <FILE id="K6KNDR" name="SineOscillator.h" compile="0" resource="0"
+            file="Source/SineOscillator.h"/>
+      <FILE id="f9iJ4C" name="Voice.h" compile="0" resource="0" file="Source/Voice.h"/>
       <FILE id="rqnh8i" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="AYMOTH" name="PluginProcessor.h" compile="0" resource="0"
@@ -12,6 +18,17 @@
       <FILE id="wAd7dT" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="bRh8qd" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+    </GROUP>
+    <GROUP id="{2B357CD0-F5B5-A16C-0B30-9B6EDBB99CBE}" name="Resources">
+      <FILE id="rGIVeS" name="knobdxblue.png" compile="0" resource="1" file="../../../Desktop/pluginGUI/knobdxblue.png"/>
+      <FILE id="RcVAjO" name="buttondxblueOff.png" compile="0" resource="1"
+            file="../../../Desktop/pluginGUI/buttondxblueOff.png"/>
+      <FILE id="UYMW5w" name="buttondxblueOn.png" compile="0" resource="1"
+            file="../../../Desktop/pluginGUI/buttondxblueOn.png"/>
+      <FILE id="oUUCDL" name="algorithms.png" compile="0" resource="1" file="../../../Desktop/pluginGUI/algorithms.png"/>
+      <FILE id="Icr1hn" name="backgroundDX.png" compile="0" resource="1"
+            file="../../../Desktop/pluginGUI/backgroundDX.png"/>
+      <FILE id="cghZka" name="logo.png" compile="0" resource="1" file="../../../Desktop/pluginGUI/logo.png"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
