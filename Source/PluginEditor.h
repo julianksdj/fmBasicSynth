@@ -82,7 +82,6 @@ private:
     
     //Algorithm selection
     juce::Label algoLabel;
-    //juce::ComboBox algoMenu;
     juce::ToggleButton algoButton1;
     juce::ToggleButton algoButton2;
     juce::ToggleButton algoButton3;

@@ -113,14 +113,6 @@ public:
             }
         }
     };
-    void removeVoice(float freq)
-    {
-        for (auto voiceIndex = 0; voiceIndex < voices.size(); ++voiceIndex)
-        {
-            if (voices[voiceIndex]->getNoteFreq() == freq)
-                voices.remove(voiceIndex);
-        }
-    };
     void setOp1attack(float a)
     {
         op1attack = a;

@@ -163,13 +163,10 @@ void FmsynthAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     {
         if (currentMessage.isNoteOn())
         {
-            //printf("\nNOTE PRESSED\n");
-            //printf("Received note %d\n",currentMessage.getNoteNumber());
             addVoice(juce::MidiMessage::getMidiNoteInHertz(currentMessage.getNoteNumber()));
         }
         else if (currentMessage.isNoteOff())
         {
-            //printf("NOTE RELEASED\n");
             deactivateVoice(juce::MidiMessage::getMidiNoteInHertz(currentMessage.getNoteNumber()));
         }
     }

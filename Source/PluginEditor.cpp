@@ -14,10 +14,6 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     : keyboardComponent (keyboardState, juce::MidiKeyboardComponent::horizontalKeyboard),
     AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    //auto windowWidth = 500;
-    //auto windowHeight = 230;
     auto windowWidth = 500;
     auto windowHeight = 230;
     
@@ -37,7 +33,6 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     algoButton3.setButtonText("3");
     
     
-    // 0,162,26
     customLook.setColour (juce::Slider::thumbColourId, juce::Colour(0,153,138));
     customLook.setColour (juce::Slider::trackColourId, juce::Colour(58,43,43));
     customLook.setColour (juce::Slider::backgroundColourId, juce::Colour(6,4,4));
@@ -283,7 +278,6 @@ void FmsynthAudioProcessorEditor::resized()
     op2RSlider.setBounds(border+knobWidth*3+sliderWidth*3, border+knobHeight, 20, 70);
 
     algoLabel.setBounds(65+knobWidth*3+sliderWidth*4, 5, 100, 20);
-    //algoMenu.setBounds(70+knobWidth*3+sliderWidth*4, getHeight()/4+20, 100, 20);
     
     algoButton1.setBounds(35+knobWidth*3+sliderWidth*5, getHeight()/4+20, buttonWidth, buttonWidth);
     algoButton2.setBounds(35+knobWidth*3+sliderWidth*5+buttonWidth, getHeight()/4+20, buttonWidth, buttonWidth);
@@ -369,12 +363,6 @@ void FmsynthAudioProcessorEditor::handleNoteOff (juce::MidiKeyboardState* source
 
 void FmsynthAudioProcessorEditor::updateToggleState (juce::Button* button, juce::String name)
 {
-        //auto state = tb.getToggleState();
-        //juce::String stateString    = state ? "ON" : "OFF";
-        //juce::String selectedString = state ? " (selected)" : "";
- 
-        //juce::Logger::outputDebugString (name + " Button changed to " + stateString);
-        //button->setButtonText (name + selectedString);
     if (name == "algorithm1")
     {
         audioProcessor.setAlgorithm(1);
