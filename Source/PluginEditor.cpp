@@ -134,7 +134,7 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     addAndMakeVisible (op1ASlider);
     // min  attack time must be 0.0001 (100us) to avoid attackSamples from being 0
     // so the division Aa = 0.125 / attackSamples is never inf
-    op1ASlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
+    op1ASlider.setNormalisableRange(juce::NormalisableRange<double>(0.01f, 5.f, 0.0001f, 1.f));
     op1ASlider.addListener (this);
     op1ASlider.setValue(audioProcessor.getOp1attack());
     op1ASlider.setLookAndFeel(&customLook);
@@ -155,7 +155,7 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     //release slider
     op1RSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op1RSlider);
-    op1RSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
+    op1RSlider.setNormalisableRange(juce::NormalisableRange<double>(0.09f, 5.f, 0.0001f, 1.f));
     op1RSlider.addListener (this);
     op1RSlider.setValue(audioProcessor.getOp1release());
     op1RSlider.setLookAndFeel(&customLook);
@@ -163,7 +163,7 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     //attack slider
     op2ASlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op2ASlider);
-    op2ASlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
+    op2ASlider.setNormalisableRange(juce::NormalisableRange<double>(0.01f, 5.f, 0.0001f, 1.f));
     op2ASlider.addListener (this);
     op2ASlider.setValue(audioProcessor.getOp2attack());
     op2ASlider.setLookAndFeel(&customLook);
@@ -184,7 +184,7 @@ FmsynthAudioProcessorEditor::FmsynthAudioProcessorEditor (FmsynthAudioProcessor&
     //release slider
     op2RSlider.setSliderStyle(juce::Slider::SliderStyle::LinearVertical);
     addAndMakeVisible (op2RSlider);
-    op2RSlider.setNormalisableRange(juce::NormalisableRange<double>(0.001f, 5.f, 0.0001f, 1.f));
+    op2RSlider.setNormalisableRange(juce::NormalisableRange<double>(0.09f, 5.f, 0.0001f, 1.f));
     op2RSlider.addListener (this);
     op2RSlider.setValue(audioProcessor.getOp2release());
     op2RSlider.setLookAndFeel(&customLook);

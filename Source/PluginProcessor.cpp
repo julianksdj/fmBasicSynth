@@ -96,14 +96,14 @@ void FmsynthAudioProcessor::changeProgramName (int index, const juce::String& ne
 void FmsynthAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     currentSampleRate = sampleRate;
-    op1attack = 0.001f;
+    op1attack = 0.01f;
     op1decay = 0.001f;
     op1sustain = 1.f;
-    op1release = 0.001f;
-    op2attack = 0.001f;
+    op1release = 0.09f;
+    op2attack = 0.01f;
     op2decay = 0.001f;
     op2sustain = 1.f;
-    op2release = 0.001f;
+    op2release = 0.09f;
     op1amp = 10.f;
     op2amp = 0.f;
     op1coarse = 1.f;
