@@ -20,15 +20,15 @@
       <FILE id="bRh8qd" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
     <GROUP id="{2B357CD0-F5B5-A16C-0B30-9B6EDBB99CBE}" name="Resources">
-      <FILE id="rGIVeS" name="knobdxblue.png" compile="0" resource="1" file="../../../Desktop/pluginGUI/knobdxblue.png"/>
-      <FILE id="RcVAjO" name="buttondxblueOff.png" compile="0" resource="1"
-            file="../../../Desktop/pluginGUI/buttondxblueOff.png"/>
-      <FILE id="UYMW5w" name="buttondxblueOn.png" compile="0" resource="1"
-            file="../../../Desktop/pluginGUI/buttondxblueOn.png"/>
-      <FILE id="oUUCDL" name="algorithms.png" compile="0" resource="1" file="../../../Desktop/pluginGUI/algorithms.png"/>
-      <FILE id="Icr1hn" name="backgroundDX.png" compile="0" resource="1"
-            file="../../../Desktop/pluginGUI/backgroundDX.png"/>
-      <FILE id="cghZka" name="logo.png" compile="0" resource="1" file="../../../Desktop/pluginGUI/logo.png"/>
+      <FILE id="LozUBB" name="buttondxblueOff.png" compile="0" resource="1"
+            file="gui_design/buttondxblueOff.png"/>
+      <FILE id="p9n7R7" name="buttondxblueOn.png" compile="0" resource="1"
+            file="gui_design/buttondxblueOn.png"/>
+      <FILE id="wcqJ2Q" name="knobdxblue.png" compile="0" resource="1" file="gui_design/knobdxblue.png"/>
+      <FILE id="eMoyTN" name="algorithms.png" compile="0" resource="1" file="gui_design/algorithms.png"/>
+      <FILE id="QQBeFC" name="backgroundDX.png" compile="0" resource="1"
+            file="gui_design/backgroundDX.png"/>
+      <FILE id="MCDCDq" name="logo.png" compile="0" resource="1" file="gui_design/logo.png"/>
     </GROUP>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
